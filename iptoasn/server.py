@@ -4,6 +4,7 @@ import requests
 import os
 import shutil
 import pandas
+import ipaddress
 
 
 class IPtoASN(HTTPServer, BaseHTTPRequestHandler):
@@ -32,8 +33,10 @@ class IPtoASN(HTTPServer, BaseHTTPRequestHandler):
         with gzip.open(os.path.join(self.dirDB, self.fnameDB), 'r') as fDB:
             header = ["range_start", "range_end", "AS_number", "country_code", "AS_description"]
             self.db = pandas.read_csv(fDB, sep='\t', names=header)
-            print(self.db)
+        self.db['uint_range_start'] = self.db['range_start'].apply(lambda x: int(ipaddress.ip_address(x)))
+        self.db['uint_range_end'] = self.db['range_end'].apply(lambda x: int(ipaddress.ip_address(x)))
 
     def queryIP(self, IP):
-        queryStr = "@IP >= range_start and @IP <= range_end"
+        uintIP = int(ipaddress.ip_address(IP))  # noqa: F841
+        queryStr = "uint_range_start <= @uintIP <= uint_range_end"
         return self.db.query(queryStr)
