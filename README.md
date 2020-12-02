@@ -34,7 +34,7 @@ The server returns a `json` with keys:
 
 # Docker
 
-The image is available on https://hub.docker.com/chmey/ip2asn.
+The image is available on https://hub.docker.com/chmey/iptoasn.
 
 I recommend using the Docker image over a local instance.
 
