@@ -9,12 +9,12 @@ import ipaddress
 
 
 class IPtoASN(HTTPServer):
-    def __init__(self, DB_DIR='./', DB_FNAME='ip2asn.tsv.gz'):
+    def __init__(self, host='localhost', port=8080, DB_DIR='./', DB_FNAME='ip2asn.tsv.gz'):
         self.dirDB = DB_DIR
         self.fnameDB = DB_FNAME
         self.updateDB()
         self.loadDB()
-        super().__init__(('localhost', 8080), self.RequestHandler)
+        super().__init__((host, port), self.RequestHandler)
 
     def updateDB(self):
         URL = "https://iptoasn.com/data/ip2asn-combined.tsv.gz"
